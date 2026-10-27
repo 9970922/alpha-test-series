@@ -1,0 +1,780 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101828">
+  <title>Alpha Test Series | MHT-CET PCM</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #101828;
+      color: white;
+      padding: 12px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-image {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: white;
+    }
+
+    .logo-text {
+      color: #70e1c1;
+      font-size: 23px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .logo-text small {
+      display: block;
+      color: white;
+      font-size: 11px;
+      font-weight: normal;
+      letter-spacing: 2px;
+    }
+
+    nav { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover { color: #70e1c1; }
+
+    .hero {
+      padding: 85px 7%;
+      background: linear-gradient(135deg, #101828, #173f67);
+      color: white;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 7px 15px;
+      border: 1px solid #70e1c1;
+      border-radius: 30px;
+      color: #70e1c1;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 0 auto 25px;
+      color: #d6e2f0;
+      font-size: 17px;
+    }
+
+    .button {
+      display: inline-block;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 23px;
+      background: #12b886;
+      color: #062e25;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .button:hover { background: #38d9a9; }
+    .button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    section { padding: 60px 7%; }
+
+    .section-title {
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .section-description {
+      text-align: center;
+      color: #667085;
+      margin: 0 auto 35px;
+      max-width: 650px;
+    }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      max-width: 950px;
+      margin: auto;
+    }
+
+    .plan {
+      background: white;
+      border: 1px solid #e4e7ec;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px #1018280d;
+    }
+
+    .plan.featured { border: 2px solid #12b886; }
+    .plan h3 { font-size: 23px; margin-bottom: 8px; }
+
+    .price {
+      font-size: 38px;
+      font-weight: bold;
+      margin: 15px 0;
+      color: #087f5b;
+    }
+
+    .plan ul { padding-left: 20px; margin-bottom: 25px; }
+    .plan li { margin-bottom: 9px; }
+    .plan .button { width: 100%; }
+
+    .info-box {
+      max-width: 750px;
+      margin: auto;
+      background: white;
+      padding: 28px;
+      border-radius: 12px;
+      border: 1px solid #e4e7ec;
+    }
+
+    .payment-section { background: #eefbf6; }
+
+    .selected-plan {
+      background: #e6fcf5;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 18px 0;
+      font-weight: bold;
+    }
+
+    .notice {
+      padding: 15px;
+      margin: 20px 0;
+      background: #fff8db;
+      border-radius: 8px;
+      color: #664d03;
+    }
+
+    .form-group { margin: 18px 0; }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input:focus {
+      outline: 2px solid #12b886;
+      border-color: transparent;
+    }
+
+    .payment-help {
+      text-align: center;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+
+    .payment-qr {
+      display: block;
+      width: 260px;
+      max-width: 100%;
+      height: auto;
+      margin: 20px auto;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      padding: 8px;
+    }
+
+    .upi-id {
+      font-size: 18px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+      margin: 5px 0 12px;
+    }
+
+    .status-message {
+      margin-top: 15px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+      max-width: 950px;
+      margin: auto;
+    }
+
+    .step-card {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px solid #e4e7ec;
+    }
+
+    .step-card h3 {
+      margin-bottom: 10px;
+      color: #087f5b;
+    }
+
+    .contact-item { margin-bottom: 20px; }
+    .contact-item a { overflow-wrap: anywhere; }
+
+    footer {
+      background: #101828;
+      color: #d0d5dd;
+      text-align: center;
+      padding: 25px 7%;
+    }
+
+    footer img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      background: white;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    footer p { margin: 5px 0; }
+
+    @media (max-width: 600px) {
+      header { justify-content: center; }
+      nav { justify-content: center; gap: 14px; }
+      .logo-image { width: 48px; height: 48px; }
+      .logo-text { font-size: 20px; }
+      .hero { padding: 65px 6%; }
+      section { padding: 45px 6%; }
+      .info-box { padding: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <a href="#home" class="logo">
+    <img src="alpha-logo.jpeg"
+         alt="Alpha Test Series Logo"
+         class="logo-image">
+    <span class="logo-text">
+      ALPHA
+      <small>TEST SERIES</small>
+    </span>
+  </a>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#tests">Test Series</a>
+    <a href="#about">About</a>
+    <a href="#help">Help</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="home">
+    <div class="hero-badge">MHT-CET PCM Preparation</div>
+    <h1>Welcome to Alpha!</h1>
+    <p>
+      Start Your MHT-CET PCM Preparation Today.
+      Practise Physics, Chemistry and Mathematics
+      with structured online mock tests.
+    </p>
+    <a href="#tests" class="button">Start MHT-CET PCM</a>
+  </section>
+
+  <section id="tests">
+    <h2 class="section-title">Choose Your Test Series</h2>
+    <p class="section-description">
+      Select a plan that suits your preparation.
+    </p>
+
+    <div class="plans">
+      <article class="plan">
+        <h3>Demo Exam</h3>
+        <p>For students starting their preparation.</p>
+        <div class="price">₹199</div>
+        <ul>
+          <li>Practice MCQ questions</li>
+          <li>Timed online test</li>
+          <li>Score calculation</li>
+          <li>Correct and incorrect answers</li>
+        </ul>
+        <button type="button" class="button"
+          onclick="selectPlan('Demo Exam',199)">
+          Select Demo
+        </button>
+      </article>
+
+      <article class="plan featured">
+        <h3>Premium Exam</h3>
+        <p>For students preparing seriously.</p>
+        <div class="price">₹499</div>
+        <ul>
+          <li>Multiple practice tests</li>
+          <li>Physics, Chemistry and Maths</li>
+          <li>Timed online tests</li>
+          <li>Subject-wise results</li>
+          <li>Estimated percentile, if data is available</li>
+        </ul>
+        <button type="button" class="button"
+          onclick="selectPlan('Premium Exam',499)">
+          Select Premium
+        </button>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-description">
+      Follow these steps to get access to your test.
+    </p>
+
+    <div class="steps">
+      <div class="step-card">
+        <h3>01. Choose Plan</h3>
+        <p>Select the Demo or Premium Test Series.</p>
+      </div>
+      <div class="step-card">
+        <h3>02. Make Payment</h3>
+        <p>Pay the displayed amount using the official UPI QR code.</p>
+      </div>
+      <div class="step-card">
+        <h3>03. Register</h3>
+        <p>Submit your name and mobile number.</p>
+      </div>
+      <div class="step-card">
+        <h3>04. Verification</h3>
+        <p>The Alpha team manually checks the payment before approving access.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="payment-section" id="payment">
+    <h2 class="section-title">Student Registration</h2>
+    <p class="section-description">
+      Select a plan, make the payment and submit your details.
+    </p>
+
+    <div class="info-box">
+      <div class="selected-plan" id="selectedPlan">
+        Please select a plan above.
+      </div>
+
+      <div class="notice">
+        <strong>Important:</strong>
+        Payment is manually verified. Registration does not
+        automatically approve payment or activate a test.
+      </div>
+
+      <div class="payment-help">
+        <h3>Pay Using UPI</h3>
+        <p>Selected Plan Amount:</p>
+        <h2 id="paymentAmount">Select a plan first</h2>
+
+        <img src="alpha-payment-qr.jpeg"
+             alt="Alpha Payment QR Code"
+             id="paymentQR"
+             class="payment-qr">
+
+        <p><strong>UPI ID</strong></p>
+        <p class="upi-id">9766404515@airtel</p>
+
+        <button type="button" class="button" onclick="copyUPI()">
+          Copy UPI ID
+        </button>
+
+        <p style="margin-top:15px;font-size:13px;color:#667085;">
+          पेमेंट करण्यापूर्वी योग्य प्लॅन आणि रक्कम तपासा.
+          UPI app मध्ये recipient आणि amount पडताळा.
+        </p>
+      </div>
+
+      <hr style="margin:22px 0;border:0;border-top:1px solid #ddd;">
+
+      <h3>Registration Details</h3>
+
+      <form id="registrationForm">
+        <div class="form-group">
+          <label for="studentName">Student Name *</label>
+          <input type="text" id="studentName"
+                 name="studentName"
+                 placeholder="Enter your full name"
+                 maxlength="100" autocomplete="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="mobile">Mobile Number *</label>
+          <input type="tel" id="mobile" name="mobile"
+                 placeholder="Enter 10-digit mobile number"
+                 inputmode="numeric"
+                 pattern="[6-9][0-9]{9}"
+                 maxlength="10" autocomplete="tel" required>
+        </div>
+
+        <button type="submit" class="button" id="submitButton">
+          Submit Registration
+        </button>
+
+        <p class="status-message" id="formMessage"
+           role="status" aria-live="polite"></p>
+      </form>
+
+      <!-- NEW: Approval check area -->
+      <div id="approvalCheckArea"
+           style="display:none;margin-top:22px;text-align:center;">
+        <hr style="margin-bottom:20px;border:0;border-top:1px solid #ddd;">
+        <h3>Check Your Payment Approval</h3>
+        <p style="margin:10px 0;">
+          Payment verify झाल्यानंतर खालील बटण दाबा.
+        </p>
+        <button type="button" class="button" id="checkApprovalButton">
+          Check Approval
+        </button>
+        <p class="status-message" id="approvalMessage"
+           role="status" aria-live="polite"></p>
+      </div>
+
+      <p style="margin-top:18px;color:#667085;font-size:13px;">
+        Your request remains pending until payment is verified.
+        Do not submit passwords or UPI PINs in this form.
+      </p>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title">About Alpha</h2>
+    <p class="section-description">
+      Alpha Test Series helps MHT-CET PCM students practise
+      Physics, Chemistry and Mathematics through online MCQ tests.
+    </p>
+  </section>
+
+  <section id="help">
+    <h2 class="section-title">Need Help?</h2>
+    <p class="section-description">
+      For assistance with registration, payment verification
+      or test access, contact our Alpha team.
+    </p>
+
+    <div class="info-box">
+      <h3 style="margin-bottom:20px;color:#087f5b;">
+        Contact Our Team
+      </h3>
+
+      <div class="contact-item">
+        <p><strong>Abhijit Sir</strong></p>
+        <p><a href="tel:9021687884">9021687884</a></p>
+      </div>
+      <hr style="border:0;border-top:1px solid #e4e7ec;margin:18px 0;">
+
+      <div class="contact-item">
+        <p><strong>Dhiraj Sir</strong></p>
+        <p><a href="tel:9511969147">9511969147</a></p>
+      </div>
+      <hr style="border:0;border-top:1px solid #e4e7ec;margin:18px 0;">
+
+      <div class="contact-item">
+        <p><strong>Ganesh Sir</strong></p>
+        <p><a href="tel:8855928907">8855928907</a></p>
+      </div>
+      <hr style="border:0;border-top:1px solid #e4e7ec;margin:18px 0;">
+
+      <div class="contact-item">
+        <p><strong>Email</strong></p>
+        <p><a href="mailto:MHTCETSUCCESS85@gmail.com">
+          MHTCETSUCCESS85@gmail.com
+        </a></p>
+      </div>
+      <hr style="border:0;border-top:1px solid #e4e7ec;margin:18px 0;">
+
+      <p><strong>Location</strong></p>
+      <p>Pune, Maharashtra</p>
+
+      <div style="margin-top:25px;text-align:center;">
+        <a href="mailto:MHTCETSUCCESS85@gmail.com" class="button">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <img src="alpha-logo.jpeg" alt="Alpha Logo">
+  <p><strong>ALPHA TEST SERIES</strong></p>
+  <p>MHT-CET PCM Preparation</p>
+  <p>© 2026 Alpha. All rights reserved.</p>
+</footer>
+
+<script>
+  const scriptURL =
+    "https://script.google.com/macros/s/AKfycbyjSN93LkyEO-iu2hKgzpEjk--UlfRW1O4WAsXUaboRxsg_W2lZLO8vbwZ8MlmpbHGlXw/exec";
+
+  let selectedPlanName = "";
+  let selectedPlanPrice = 0;
+  let submitting = false;
+
+  function selectPlan(name, price) {
+    selectedPlanName = name;
+    selectedPlanPrice = price;
+
+    document.getElementById("selectedPlan").textContent =
+      "Selected Plan: " + name + " | Amount: ₹" + price;
+
+    document.getElementById("paymentAmount").textContent =
+      "₹" + price;
+
+    document.getElementById("payment").scrollIntoView({
+      behavior: "smooth"
+    });
+  }
+
+  async function copyUPI() {
+    const upiId = "9766404515@airtel";
+
+    try {
+      await navigator.clipboard.writeText(upiId);
+      alert("UPI ID copied successfully!");
+    } catch (error) {
+      prompt("Copy this UPI ID:", upiId);
+    }
+  }
+
+  document.getElementById("registrationForm")
+    .addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      if (submitting) return;
+
+      const message = document.getElementById("formMessage");
+      const submitButton = document.getElementById("submitButton");
+      const name = document.getElementById("studentName").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+
+      message.style.color = "#b42318";
+
+      if (!selectedPlanName || !selectedPlanPrice) {
+        message.textContent = "Please select a test plan first.";
+        return;
+      }
+
+      if (name.length < 2) {
+        message.textContent = "Please enter your full name.";
+        return;
+      }
+
+      if (!/^[6-9][0-9]{9}$/.test(mobile)) {
+        message.textContent =
+          "Please enter a valid 10-digit mobile number.";
+        return;
+      }
+
+      submitting = true;
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+
+      const registrationId = crypto.randomUUID();
+
+      const formData = new URLSearchParams({
+        action: "register",
+        registrationId: registrationId,
+        studentName: name,
+        mobile: mobile,
+        planName: selectedPlanName,
+        amount: String(selectedPlanPrice),
+        paymentStatus: "Pending"
+      });
+
+      try {
+        await fetch(scriptURL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+
+        // Save this registration ID in the current browser session.
+        sessionStorage.setItem("alphaRegistrationId", registrationId);
+
+        message.style.color = "#087f5b";
+        message.textContent =
+          "Registration request sent. Receipt cannot be confirmed here. " +
+          "Please check with Alpha Team. Your payment is Pending.";
+
+        // Show the approval button after registration submission.
+        document.getElementById("approvalCheckArea").style.display = "block";
+        document.getElementById("approvalMessage").textContent = "";
+
+        document.getElementById("registrationForm").reset();
+        selectedPlanName = "";
+        selectedPlanPrice = 0;
+
+        document.getElementById("selectedPlan").textContent =
+          "Please select a plan above.";
+        document.getElementById("paymentAmount").textContent =
+          "Select a plan first";
+
+      } catch (error) {
+        console.error("Registration error:", error);
+        message.style.color = "#b42318";
+        message.textContent =
+          "Unable to send the request. Please try again or contact Alpha Team.";
+      } finally {
+        submitting = false;
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit Registration";
+      }
+    });
+
+  // NEW: Check approval status from the Google Apps Script.
+  document.getElementById("checkApprovalButton")
+    .addEventListener("click", checkApproval);
+
+  function checkApproval() {
+    const registrationId =
+      sessionStorage.getItem("alphaRegistrationId");
+
+    const resultMessage =
+      document.getElementById("approvalMessage");
+
+    const button =
+      document.getElementById("checkApprovalButton");
+
+    if (!registrationId) {
+      resultMessage.style.color = "#b42318";
+      resultMessage.textContent =
+        "Registration ID not found in this browser session. Please register again.";
+      return;
+    }
+
+    button.disabled = true;
+    resultMessage.style.color = "#344054";
+    resultMessage.textContent = "Checking your approval...";
+
+    const callbackName =
+      "alphaCallback_" + Date.now() + "_" +
+      Math.random().toString(36).slice(2, 8);
+
+    const requestURL = new URL(scriptURL);
+    requestURL.searchParams.set("action", "status");
+    requestURL.searchParams.set("registrationId", registrationId);
+    requestURL.searchParams.set("callback", callbackName);
+
+    const script = document.createElement("script");
+    let finished = false;
+    let timeoutId;
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timeoutId);
+      delete window[callbackName];
+      script.remove();
+      button.disabled = false;
+    }
+
+    window[callbackName] = function(result) {
+      if (!result || !result.status) {
+        resultMessage.style.color = "#b42318";
+        resultMessage.textContent =
+          "Invalid response received. Please contact Alpha Team.";
+        finish();
+        return;
+      }
+
+      if (result.status === "Approved") {
+        resultMessage.style.color = "#087f5b";
+        resultMessage.textContent =
+          "Payment Approved! Opening your test page...";
+
+        finish();
+
+        // Open test.html in the same folder as index.html.
+        window.location.href = "test.html";
+        return;
+      }
+
+      if (result.status === "Pending") {
+        resultMessage.style.color = "#946200";
+        resultMessage.textContent =
+          "Your payment is still Pending. Please try again after Alpha Team verifies it.";
+      } else if (result.status === "Rejected") {
+        resultMessage.style.color = "#b42318";
+        resultMessage.textContent =
+          "Payment Rejected. Please contact Alpha Team.";
+      } else {
+        resultMessage.style.color = "#b42318";
+        resultMessage.textContent =
+          "Registration not found. Please contact Alpha Team.";
+      }
+
+      finish();
+    };
+
+    script.onerror = function() {
+      resultMessage.style.color = "#b42318";
+      resultMessage.textContent =
+        "Unable to check approval. Please try again.";
+      finish();
+    };
+
+    timeoutId = setTimeout(function() {
+      resultMessage.style.color = "#b42318";
+      resultMessage.textContent =
+        "Approval check timed out. Please try again.";
+      finish();
+    }, 10000);
+
+    script.src = requestURL.toString();
+    document.body.appendChild(script);
+  }
+</script>
+
+</body>
+</html>

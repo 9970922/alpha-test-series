@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Test Series | MHT-CET PCM</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
+header{background:#172554;color:white;padding:16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:bold}
+main{max-width:1300px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:1fr 300px;gap:15px}
+.panel{background:white;border:1px solid #dbe3ef;border-radius:10px;padding:18px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+button{border:0;border-radius:6px;padding:10px 12px;font-weight:bold;cursor:pointer}
+.tab{background:#e2e8f0}.tab.active,.blue{background:#2563eb;color:white}
+.purple{background:#7c3aed;color:white}.green{background:#15803d;color:white}
+.red{background:#dc2626;color:white}.gray{background:#e2e8f0}
+.question{font-size:19px;line-height:1.5;font-weight:bold;margin:22px 0}
+.option{display:block;padding:13px;border:1px solid #cbd5e1;border-radius:8px;margin:10px 0;cursor:pointer}
+.option.selected{background:#eff6ff;border-color:#2563eb}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-top:22px;border-top:1px solid #ddd;padding-top:15px}
+.group{display:flex;gap:7px;flex-wrap:wrap}
+.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.pbtn{background:white;border:1px solid #cbd5e1}
+.answered{background:#16a34a!important;color:white}
+.notanswered{background:#dc2626!important;color:white}
+.review{background:#7c3aed!important;color:white;border-radius:12px 12px 5px 5px}
+.answeredreview{background:#7c3aed!important;color:white;border:3px solid #16a34a}
+.current{outline:3px solid #93c5fd}
+.legend{font-size:12px;line-height:2;margin-bottom:12px}
+#result{display:none;max-width:1100px;margin:20px auto;padding:12px}
+.resultbox{background:white;border:1px solid #ddd;border-radius:10px;padding:20px;margin-bottom:14px}
+.score{font-size:42px;color:#2563eb;font-weight:bold}
+table{width:100%;border-collapse:collapse;background:white}
+td,th{padding:10px;border:1px solid #ddd;text-align:left}
+.reviewitem{padding:12px 0;border-bottom:1px solid #ddd}
+.correct{color:#15803d}.wrong{color:#dc2626}
+#timer{font-weight:bold}
+@media(max-width:850px){main{grid-template-columns:1fr}.sidebar{order:-1}}
+/* MHT-CET exam layout */
+#exam {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 15px;
+  align-items: start;
+  max-width: 1400px;
+  margin: 18px auto;
+  padding: 0 12px;
+}
+
+#questionSection {
+  min-width: 0;
+}
+
+#questionPalette {
+  position: sticky;
+  top: 15px;
+  min-width: 0;
+}
+
+#questionPalette .palette {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 850px) {
+  #exam {
+    grid-template-columns: 1fr;
+  }
+
+  #questionPalette {
+    position: static;
+    order: -1;
+  }
+}
+/* MHT-CET style exam layout */
+#exam {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+  max-width: 1400px;
+  margin: 20px auto;
+  padding: 15px;
+}
+
+/* Question area */
+#questionSection {
+  min-width: 0;
+}
+
+/* Right-side question palette */
+#questionPalette {
+  position: sticky;
+  top: 15px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  #exam {
+    grid-template-columns: 1fr;
+  }
+
+  #questionPalette {
+    position: static;
+  }
+}</style>
+</head>
+<body>
+<header>
+  <div><div class="brand">ALPHA TEST SERIES</div>
+  <small>MHT-CET PCM Practice Test</small></div>
+  <div id="timer">Time Left: 180:00</div>
+</header>
+
+<section id="instructions" style="max-width:900px;margin:25px auto;padding:20px;">
+  <div style="background:white;border:1px solid #dbe3ef;border-radius:14px;padding:25px;">
+    <div style="text-align:center;">
+      <h1 style="color:#1d4ed8;margin-bottom:5px;">ALPHA TEST SERIES</h1>
+      <h2>MHT-CET PCM Mock Test</h2>
+      <p style="color:#15803d;font-weight:bold;">✓ Payment Approved</p>
+      <p>Read the exam details carefully before starting.</p>
+    </div>
+
+    <hr>
+
+    <h2>Exam Details</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+      <div style="background:#eff6ff;padding:16px;border-radius:8px;">
+        <b>Physics</b>
+        <h3>50 Questions</h3>
+        <p>50 Marks</p>
+      </div>
+      <div style="background:#f0fdf4;padding:16px;border-radius:8px;">
+        <b>Chemistry</b>
+        <h3>50 Questions</h3>
+        <p>50 Marks</p>
+      </div>
+      <div style="background:#faf5ff;padding:16px;border-radius:8px;">
+        <b>Mathematics</b>
+        <h3>50 Questions</h3>
+        <p>100 Marks</p>
+      </div>
+    </div>
+
+    <div style="background:#f8fafc;padding:18px;border-radius:8px;margin-top:16px;">
+      <p><b>Total Questions:</b> 150</p>
+      <p><b>Maximum Marks:</b> 200</p>
+      <p><b>Duration:</b> 180 Minutes (3 Hours)</p>
+      <p><b>Question Format:</b> Four options (A, B, C, D)</p>
+    </div>
+
+    <h3>Instructions</h3>
+    <ul style="line-height:1.9;">
+      <li>Each question has four options.</li>
+      <li>Physics and Chemistry carry 1 mark per question.</li>
+      <li>Mathematics carries 2 marks per question.</li>
+      <li>The timer starts only after you click Start Test.</li>
+      <li>Submit your test before the timer reaches zero.</li>
+    </ul>
+
+    <button type="button" onclick="startTest()"
+      style="width:100%;padding:15px;background:#2563eb;color:white;font-size:18px;border-radius:8px;">
+      Start Test
+    </button>
+  </div>
+</section>
+
+
+<main id="exam" style="display:none;">
+  <section id="questionSection" class="panel">
+    <div class="tabs">
+      <button class="tab active" onclick="setFilter('All',this)">All</button>
+      <button class="tab" onclick="setFilter('Physics',this)">Physics</button>
+      <button class="tab" onclick="setFilter('Chemistry',this)">Chemistry</button>
+      <button class="tab" onclick="setFilter('Mathematics',this)">Mathematics</button>
+    </div>
+
+    <div id="meta"></div>
+    <div id="question" class="question"></div>
+    <div id="options"></div>
+
+    <div class="actions">
+      <div class="group">
+        <button class="gray" onclick="previous()">Previous</button>
+        <button class="gray" onclick="clearAnswer()">Clear Response</button>
+      </div>
+      <div class="group">
+        <button class="purple" onclick="markReview()">Mark for Review</button>
+        <button class="blue" onclick="next()">Save &amp; Next</button>
+      </div>
+    </div>
+  </section>
+
+  <aside id="questionPalette" class="panel sidebar">
+    <h3>Question Palette</h3>
+
+    <div class="legend">
+      🟩 Answered<br>
+      🟥 Visited but not answered<br>
+      ⬜ Not visited<br>
+      🟪 Marked for review<br>
+      🟪🟩 Answered and marked for review
+    </div>
+
+    <p id="counts"></p>
+    <div id="palette" class="palette"></div>
+
+    <button class="red" style="width:100%;margin-top:18px"
+      onclick="submitTest()">Submit Test</button>
+
+    <p>
+      <small>
+        Physics: 50 × 1 mark<br>
+        Chemistry: 50 × 1 mark<br>
+        Mathematics: 50 × 2 marks<br>
+        Total: 200 marks
+      </small>
+    </p>
+  </aside>
+</main>
+
+<section class="panel">
+  <div class="tabs">
+    <button class="tab active" onclick="setFilter('All',this)">All</button>
+    <button class="tab" onclick="setFilter('Physics',this)">Physics</button>
+    <button class="tab" onclick="setFilter('Chemistry',this)">Chemistry</button>
+    <button class="tab" onclick="setFilter('Mathematics',this)">Mathematics</button>
+  </div>
+  <div id="meta"></div>
+  <div id="question" class="question"></div>
+  <div id="options"></div>
+  <div class="actions">
+    <div class="group">
+      <button class="gray" onclick="previous()">Previous</button>
+      <button class="gray" onclick="clearAnswer()">Clear Response</button>
+    </div>
+    <div class="group">
+      <button class="purple" onclick="markReview()">Mark for Review</button>
+      <button class="blue" onclick="next()">Save &amp; Next</button>
+    </div>
+  </div>
+</section>
+
+<aside class="panel sidebar">
+  <h3>Question Palette</h3>
+  <div class="legend">
+    🟩 Answered<br>🟥 Visited but not answered<br>
+    ⬜ Not visited<br>🟪 Marked for review<br>
+    🟪🟩 Answered and marked for review
+  </div>
+  <p id="counts"></p>
+  <div id="palette" class="palette"></div>
+  <button class="red" style="width:100%;margin-top:18px" onclick="submitTest()">Submit Test</button>
+  <p><small>Physics: 50 × 1 mark<br>Chemistry: 50 × 1 mark<br>Mathematics: 50 × 2 marks<br>Total: 200 marks</small></p>
+</aside>
+</main>
+
+<section id="result">
+  <div class="resultbox">
+    <h1>Test Result</h1>
+    <p id="message"></p>
+    <div class="score"><span id="score">0</span> / 200</div>
+    <p id="percentage"></p>
+    <p><b>Alpha Batch Percentile:</b> <span id="percentile">Pending</span></p>
+    <small>हा सराव परीक्षेचा निकाल आहे. अधिकृत MHT-CET percentile नाही. Batch percentile मोजण्यासाठी अनेक विद्यार्थ्यांचे गुण Google Sheet मध्ये साठवणे आवश्यक आहे.</small>
+  </div>
+  <div class="resultbox">
+    <p>Correct: <b id="correct"></b></p>
+    <p>Incorrect: <b id="wrong"></b></p>
+    <p>Unattempted: <b id="unattempted"></b></p>
+    <p>Time used: <b id="timeUsed"></b></p>
+  </div>
+  <div class="resultbox">
+    <h2>Subject-wise Result</h2>
+    <table><thead><tr><th>Subject</th><th>Correct</th><th>Wrong</th><th>Unattempted</th><th>Score</th><th>Max</th></tr></thead>
+    <tbody id="subjectRows"></tbody></table>
+  </div>
+  <div class="resultbox">
+    <h2>Answer Review</h2>
+    <div id="reviewResults"></div>
+  </div>
+  <button class="blue" onclick="location.href='index.html'">Return to Home</button>
+  <button class="gray" onclick="print()">Print Result</button>
+</section>
+
+<script>
+/* Original practice questions. Each question has 4 options.
+   Answers are stored in browser JavaScript, so this version is
+   suitable for practice but is NOT secure enough for a paid exam. */
+
+const questions = [
+/* PHYSICS: 50 questions */
+["Physics","SI unit of electric charge?",["Ampere","Coulomb","Volt","Ohm"],1,"Charge is measured in coulombs."],
+["Physics","Dimensional formula of force?",["MLT⁻¹","ML²T⁻²","MLT⁻²","M⁰LT⁻²"],2,"Force = mass × acceleration."],
+["Physics","Slope of a velocity-time graph represents:",["Displacement","Acceleration","Speed","Momentum"],1,"The slope gives acceleration."],
+["Physics","Which is a scalar quantity?",["Displacement","Velocity","Force","Work"],3,"Work is a scalar quantity."],
+["Physics","Approximate acceleration due to gravity on Earth?",["4.9","9.8","12.8","19.6"],1,"g is approximately 9.8 m/s²."],
+["Physics","SI unit of power?",["Joule","Newton","Watt","Pascal"],2,"Power is measured in watts."],
+["Physics","In uniform circular motion, which changes continuously?",["Mass","Speed","Velocity","Radius"],2,"Velocity direction changes."],
+["Physics","Work done by centripetal force in uniform circular motion?",["Positive","Negative","Zero","Infinite"],2,"Centripetal force is perpendicular to motion."],
+["Physics","SI unit of frequency?",["Decibel","Hertz","Metre","Second"],1,"Frequency is measured in hertz."],
+["Physics","Energy stored in a capacitor?",["CV","CV²","½CV²","2CV²"],2,"Energy is ½CV²."],
+["Physics","Ohm's law is:",["V=IR","P=VI²","I=VR","R=VI"],0,"Ohm's law: V=IR."],
+["Physics","Two resistors 2 Ω and 3 Ω in series give:",["1.2 Ω","5 Ω","6 Ω","2.5 Ω"],1,"Series resistances add."],
+["Physics","SI unit of magnetic flux?",["Tesla","Weber","Henry","Gauss"],1,"Magnetic flux is measured in webers."],
+["Physics","A transformer works on:",["Self-induction only","Mutual induction","Photoelectric effect","Electrolysis"],1,"A transformer uses mutual induction."],
+["Physics","Speed of light in vacuum approximately:",["3×10⁶","3×10⁸","3×10¹⁰","3×10⁴ m/s"],1,"Light travels at about 3×10⁸ m/s."],
+["Physics","SI unit of capacitance?",["Farad","Henry","Weber","Tesla"],0,"Capacitance is measured in farads."],
+["Physics","In a purely resistive AC circuit, voltage and current are:",["90° apart","In phase","180° apart","Unrelated"],1,"They are in phase."],
+["Physics","Blue colour of sky is mainly due to:",["Interference","Diffraction","Rayleigh scattering","Reflection"],2,"Short wavelengths scatter more strongly."],
+["Physics","Focal length of a plane mirror is:",["Zero","One metre","Infinite","−1 m"],2,"A plane mirror has infinite focal length."],
+["Physics","Power of a lens with focal length +0.5 m?",["+0.5 D","+1 D","+2 D","−2 D"],2,"P=1/f=+2 dioptres."],
+["Physics","Photoelectric effect supports the:",["Wave-only model","Particle nature of light","Sound nature","Ether theory"],1,"The effect is explained by photons."],
+["Physics","Energy of a photon is:",["mc²","hν","½mv²","qV²"],1,"Photon energy is hν."],
+["Physics","Number of protons in a nucleus is its:",["Mass number","Atomic number","Neutron number","Valency"],1,"Atomic number equals proton number."],
+["Physics","During one radioactive half-life:",["All nuclei decay","Half the nuclei decay","Mass doubles","Activity becomes zero"],1,"Half of the radioactive nuclei decay."],
+["Physics","A p-type semiconductor is made using a:",["Pentavalent impurity","Trivalent impurity","Noble gas","Pure silicon atom"],1,"Trivalent dopants create holes."],
+["Physics","Majority carriers in n-type semiconductor:",["Holes","Electrons","Protons","Neutrons"],1,"Electrons are majority carriers."],
+["Physics","de Broglie wavelength is:",["p/h","h/p","hp","h+p"],1,"λ=h/p."],
+["Physics","SI unit of pressure:",["Joule","Pascal","Watt","Coulomb"],1,"Pressure is measured in pascals."],
+["Physics","First law of thermodynamics expresses conservation of:",["Charge","Energy","Momentum only","Mass number"],1,"It expresses energy conservation."],
+["Physics","For an ideal gas at constant temperature, PV is:",["Zero","Constant","Increasing","Decreasing"],1,"Boyle's law: PV is constant."],
+["Physics","SI unit of specific heat capacity:",["J kg⁻¹ K⁻¹","J kg K","W m⁻¹","N m⁻²"],0,"Specific heat uses J/(kg K)."],
+["Physics","Small-angle simple pendulum period depends on:",["Mass","Amplitude only","Length and g","Bob material"],2,"T=2π√(L/g)."],
+["Physics","Sound in air consists of:",["Transverse EM waves","Longitudinal mechanical waves","Matter waves","Radio waves"],1,"Sound travels as longitudinal pressure waves."],
+["Physics","Young's modulus has the same unit as:",["Strain","Pressure","Length","Energy"],1,"Strain is dimensionless, so units equal pressure."],
+["Physics","Escape velocity depends on:",["Object mass","Planet mass and radius","Colour","Sound speed"],1,"v=√(2GM/R)."],
+["Physics","Circular orbital speed of a satellite:",["√(GM/r)","GM/r²","2πr²","√(gr²)"],0,"v=√(GM/r)."],
+["Physics","SI unit of angular momentum:",["kg m² s⁻¹","kg m s⁻²","N/m","J/s"],0,"Dimensions are ML²T⁻¹."],
+["Physics","Moment of inertia depends on:",["Only total mass","Mass distribution about axis","Only angular speed","Only torque"],1,"Mass distribution determines moment of inertia."],
+["Physics","Coefficient of friction is:",["Measured in N","Measured in m","Dimensionless","Measured in J"],2,"It is a ratio of forces."],
+["Physics","Impulse equals change in:",["Kinetic energy","Momentum","Power","Density"],1,"Impulse equals change in momentum."],
+["Physics","SI unit of surface tension:",["N/m","N m","Pa s","J/kg"],0,"Surface tension is force per length."],
+["Physics","A convex lens is a:",["Diverging lens","Converging lens","Plane lens","Mirror"],1,"A convex lens converges parallel rays."],
+["Physics","Angle of incidence equals angle of reflection under the law of:",["Refraction","Reflection","Dispersion","Diffraction"],1,"Both angles are measured from the normal."],
+["Physics","In Young's double-slit experiment, fringe width is proportional to:",["Slit separation","Wavelength","Inverse screen distance","Inverse wavelength"],1,"β=λD/d."],
+["Physics","SI unit of inductance:",["Farad","Henry","Weber","Ohm metre"],1,"Inductance is measured in henries."],
+["Physics","RMS voltage for peak voltage V₀ is:",["V₀","V₀/2","V₀/√2","√2V₀"],2,"Vrms=V₀/√2."],
+["Physics","An ideal diode mainly allows current in:",["Both directions equally","One direction","Neither direction","Only at zero voltage"],1,"A diode conducts in forward bias."],
+["Physics","Charge on an electron:",["+1.6×10⁻¹⁹ C","−1.6×10⁻¹⁹ C","Zero","−1.6×10⁻¹⁶ C"],1,"Electron charge is negative."],
+["Physics","Two equal resistors R in parallel have resistance:",["2R","R","R/2","R²"],2,"Equivalent resistance is R/2."],
+["Physics","Inverse-square force between point charges is described by:",["Coulomb's law","Faraday's law","Ohm's law","Hooke's law"],0,"Coulomb's force follows inverse-square dependence."],
+
+/* CHEMISTRY: 50 questions */
+["Chemistry","Particles in one mole approximately:",["6.022×10²³","3×10⁸","9.81","1.6×10⁻¹⁹"],0,"Avogadro's constant is 6.022×10²³ mol⁻¹."],
+["Chemistry","pH of neutral water at 25°C:",["0","5","7","14"],2,"Neutral water has pH 7 at 25°C."],
+["Chemistry","Atomic number of carbon:",["4","6","8","12"],1,"Carbon has six protons."],
+["Chemistry","Bond involving shared electron pairs:",["Ionic","Covalent","Metallic only","Hydrogen only"],1,"Covalent bonds share electron pairs."],
+["Chemistry","Usual oxidation number of oxygen:",["+2","−2","−1","0"],1,"Oxygen is usually −2."],
+["Chemistry","Acid reacting with a reactive metal commonly releases:",["Oxygen","Hydrogen","Nitrogen","Chlorine"],1,"The reaction commonly releases hydrogen gas."],
+["Chemistry","Carbon hybridisation in methane:",["sp","sp²","sp³","dsp²"],2,"Methane carbon is sp³ hybridised."],
+["Chemistry","Which is a noble gas?",["Nitrogen","Oxygen","Argon","Hydrogen"],2,"Argon belongs to Group 18."],
+["Chemistry","Formula of washing soda:",["NaHCO₃","Na₂CO₃·10H₂O","CaCO₃","NaCl"],1,"Washing soda is sodium carbonate decahydrate."],
+["Chemistry","Most electronegative element:",["Oxygen","Chlorine","Fluorine","Nitrogen"],2,"Fluorine is the most electronegative element."],
+["Chemistry","A catalyst increases reaction rate by:",["Increasing ΔG","Lowering activation energy","Changing equilibrium constant","Being consumed"],1,"A catalyst offers a lower-activation-energy pathway."],
+["Chemistry","For an exothermic reaction, ΔH is:",["Positive","Negative","Always zero","Infinite"],1,"Exothermic reactions release heat."],
+["Chemistry","Direct conversion of solid to gas:",["Condensation","Sublimation","Fusion","Freezing"],1,"This process is sublimation."],
+["Chemistry","A colligative property used to determine macromolecule molar mass:",["Osmotic pressure","Colour","Viscosity only","Surface colour"],0,"Osmotic pressure is useful for macromolecules."],
+["Chemistry","Unit of molarity:",["mol kg⁻¹","mol L⁻¹","g mol⁻¹","kg mol⁻¹"],1,"Molarity is moles per litre of solution."],
+["Chemistry","Which solution has highest hydrogen-ion concentration?",["pH 2","pH 5","pH 7","pH 10"],0,"Lower pH means higher hydrogen-ion concentration."],
+["Chemistry","Conjugate base formed when H₂CO₃ loses one proton:",["CO₃²⁻","HCO₃⁻","H₃O⁺","OH⁻"],1,"H₂CO₃ forms HCO₃⁻ after losing H⁺."],
+["Chemistry","Which is an alkali metal?",["Calcium","Sodium","Aluminium","Chlorine"],1,"Sodium is a Group 1 element."],
+["Chemistry","Chief ore of aluminium:",["Haematite","Bauxite","Galena","Cinnabar"],1,"Bauxite is the principal aluminium ore."],
+["Chemistry","Oxidation state of Mn in KMnO₄:",["+2","+4","+6","+7"],3,"Manganese has oxidation state +7."],
+["Chemistry","At the cathode during electrolysis, which occurs?",["Oxidation","Reduction","Combustion","Neutralisation"],1,"Reduction occurs at the cathode."],
+["Chemistry","Standard hydrogen electrode potential is defined as:",["+1 V","−1 V","0 V","+0.76 V"],2,"Its standard potential is defined as zero."],
+["Chemistry","Main constituent of natural gas:",["Ethene","Methane","Ethanol","Carbon monoxide"],1,"Natural gas mainly contains methane."],
+["Chemistry","Functional group of alcohols:",["−CHO","−COOH","−OH","−NH₂"],2,"Alcohols contain the hydroxyl group."],
+["Chemistry","IUPAC name of CH₃COOH:",["Methanoic acid","Ethanoic acid","Propanone","Ethanol"],1,"CH₃COOH is ethanoic acid."],
+["Chemistry","Molecular formula of benzene:",["C₆H₆","C₆H₁₂","C₆H₁₄","C₅H₆"],0,"Benzene is C₆H₆."],
+["Chemistry","Reagent commonly used to identify aldehydes:",["Tollens' reagent","Sodium chloride","Water","Nitrogen"],0,"Aldehydes generally give a silver mirror with Tollens' reagent."],
+["Chemistry","Polymer formed from ethene:",["PVC","Polythene","Nylon-6,6","Teflon"],1,"Ethene forms polyethene by addition polymerisation."],
+["Chemistry","Which is biodegradable?",["PHBV","PVC","Polystyrene","Teflon"],0,"PHBV is a biodegradable polymer."],
+["Chemistry","Transition metals show variable oxidation states partly because of:",["Large size only","Similar ns and (n−1)d orbital energies","No d electrons","Noble-gas configuration"],1,"The orbital energies can be similar."],
+["Chemistry","Which is a halogen?",["Neon","Bromine","Sodium","Magnesium"],1,"Bromine is in Group 17."],
+["Chemistry","Shape of NH₃ molecule:",["Linear","Trigonal planar","Trigonal pyramidal","Octahedral"],2,"A lone pair gives a trigonal-pyramidal shape."],
+["Chemistry","Important intermolecular attraction in water:",["Hydrogen bonding","London forces only","Ionic bonding","Metallic bonding"],0,"Water forms hydrogen bonds."],
+["Chemistry","Gas law relating pressure and volume at constant temperature:",["Charles' law","Boyle's law","Avogadro's law","Faraday's law"],1,"Boyle's law relates pressure and volume."],
+["Chemistry","Reaction rate is change in concentration per:",["Unit time","Unit mass","Unit colour","Unit pressure"],0,"Rate is concentration change per unit time."],
+["Chemistry","Unit of first-order rate constant:",["mol L⁻¹ s⁻¹","s⁻¹","L mol⁻¹ s⁻¹","mol² L⁻²"],1,"First-order rate constants have units of inverse time."],
+["Chemistry","A buffer solution resists changes in:",["Temperature only","pH","Volume only","Colour only"],1,"Buffers resist pH changes."],
+["Chemistry","Which is a strong acid in water?",["HCl","CH₃COOH","H₂CO₃","H₂S"],0,"HCl is a strong acid."],
+["Chemistry","Common name of CaO:",["Slaked lime","Quicklime","Limestone","Bleaching powder"],1,"Calcium oxide is quicklime."],
+["Chemistry","Haber process uses:",["Nitrogen and hydrogen","CO₂ and hydrogen","Oxygen and nitrogen","Chlorine and hydrogen"],0,"Ammonia is made from nitrogen and hydrogen."],
+["Chemistry","Which is an amphoteric oxide?",["Na₂O","Al₂O₃","SO₃","CO₂"],1,"Aluminium oxide reacts with acids and bases."],
+["Chemistry","Number of sigma bonds in ethane C₂H₆:",["5","6","7","8"],2,"Six C-H and one C-C sigma bond."],
+["Chemistry","Which is a primary alcohol?",["Propan-1-ol","Propan-2-ol","2-methylpropan-2-ol","None"],0,"The OH-bearing carbon is attached to one carbon."],
+["Chemistry","Monomer of PVC:",["Ethene","Vinyl chloride","Styrene","Tetrafluoroethene"],1,"PVC is formed from vinyl chloride."],
+["Chemistry","Which vitamin contains cobalt?",["Vitamin A","Vitamin B₁₂","Vitamin C","Vitamin D"],1,"Vitamin B₁₂ contains cobalt."],
+["Chemistry","Temporary hardness of water is mainly due to:",["Ca/Mg bicarbonates","Sodium chloride","Potassium nitrate","Silica"],0,"Calcium and magnesium bicarbonates cause temporary hardness."],
+["Chemistry","Which gas turns limewater milky?",["Hydrogen","Carbon dioxide","Oxygen","Nitrogen"],1,"CO₂ forms calcium carbonate in limewater."],
+["Chemistry","Molecular geometry of SF₆:",["Tetrahedral","Octahedral","Trigonal planar","Linear"],1,"SF₆ has octahedral geometry."],
+["Chemistry","Which is an intensive property?",["Mass","Volume","Temperature","Amount of substance"],2,"Temperature does not depend on sample size."],
+
+/* MATHEMATICS: 50 questions, 2 marks each */
+["Mathematics","If f(x)=2x+3, find f(4).",["8","11","12","14"],1,"f(4)=2×4+3=11."],
+["Mathematics","Roots of x²−5x+6=0:",["1 and 6","2 and 3","−2 and −3","−1 and −6"],1,"Factorise as (x−2)(x−3)=0."],
+["Mathematics","Derivative of x³:",["x²","2x","3x²","3x"],2,"Power rule gives 3x²."],
+["Mathematics","sin 30° equals:",["0","1/2","√3/2","1"],1,"sin 30°=1/2."],
+["Mathematics","cos 60° equals:",["0","1/2","√3/2","1"],1,"cos 60°=1/2."],
+["Mathematics","Determinant of [[1,2],[3,4]]:",["−2","2","10","−10"],0,"Determinant = 4−6 = −2."],
+["Mathematics","Distance between (0,0) and (3,4):",["3","4","5","7"],2,"Distance = √(9+16)=5."],
+["Mathematics","Slope of y=3x−2:",["−2","2","3","−3"],2,"The coefficient of x is the slope."],
+["Mathematics","Sum of first n positive integers:",["n²","n(n+1)/2","n(n−1)/2","2n+1"],1,"Use n(n+1)/2."],
+["Mathematics","Common ratio of 3,6,12,24,…:",["2","3","4","6"],0,"Each term is twice the preceding term."],
+["Mathematics","Integral of 2x dx:",["2x²+C","x²+C","2+C","x+C"],1,"The integral is x²+C."],
+["Mathematics","log₁₀ 1000 equals:",["1","2","3","10"],2,"10³=1000."],
+["Mathematics","Midpoint of (2,4) and (6,8):",["(4,6)","(8,12)","(2,2)","(3,4)"],0,"Average the x and y coordinates."],
+["Mathematics","If A={1,2,3}, B={3,4}, A∩B is:",["{1,2}","{3}","{1,2,3,4}","{4}"],1,"Intersection contains common elements."],
+["Mathematics","Permutations of 3 distinct objects:",["3","6","9","12"],1,"3!=6."],
+["Mathematics","Probability of a head on a fair coin toss:",["0","1/4","1/2","1"],2,"One of two equally likely outcomes is heads."],
+["Mathematics","tan 45° equals:",["0","1/2","1","√3"],2,"tan 45°=1."],
+["Mathematics","If vectors a and b are perpendicular, a·b is:",["1","−1","0","|a||b|"],2,"The cosine of 90° is zero."],
+["Mathematics","Magnitude of vector (3,4):",["3","4","5","7"],2,"Magnitude = √(9+16)=5."],
+["Mathematics","Solve 2x+5=13:",["2","3","4","5"],2,"2x=8, so x=4."],
+["Mathematics","Limit of sin x/x as x→0 in radians:",["0","1","−1","∞"],1,"This standard limit equals 1."],
+["Mathematics","Derivative of sin x:",["−sin x","cos x","−cos x","tan x"],1,"d(sin x)/dx=cos x."],
+["Mathematics","Derivative of eˣ:",["xeˣ","eˣ","ln x","1/x"],1,"The derivative of eˣ is eˣ."],
+["Mathematics","Integral of cos x dx:",["−sin x+C","sin x+C","cos x+C","−cos x+C"],1,"The integral is sin x+C."],
+["Mathematics","Equation of x-axis:",["x=0","y=0","x=y","y=1"],1,"Points on the x-axis have y=0."],
+["Mathematics","Centre of x²+y²=25:",["(5,5)","(0,5)","(0,0)","(−5,0)"],2,"The circle is centred at the origin."],
+["Mathematics","Radius of x²+y²=25:",["5","25","10","√5"],0,"Radius is √25=5."],
+["Mathematics","Discriminant of x²+4x+4=0:",["16","8","4","0"],3,"D=b²−4ac=16−16=0."],
+["Mathematics","For mutually exclusive events A and B, P(A∩B) is:",["1","P(A)+P(B)","0","Always P(A)P(B)"],2,"They cannot occur together."],
+["Mathematics","Mean of 2,4,6,8:",["4","5","6","20"],1,"Mean = 20/4=5."],
+["Mathematics","Sum of interior angles of a triangle:",["90°","180°","270°","360°"],1,"The angle sum is 180°."],
+["Mathematics","Value of 5!:",["25","60","100","120"],3,"5!=120."],
+["Mathematics","Ways to choose 2 objects from 4:",["4","6","8","12"],1,"⁴C₂=6."],
+["Mathematics","If log₂x=5, x is:",["10","16","25","32"],3,"x=2⁵=32."],
+["Mathematics","(a+b)² equals:",["a²+b²","a²+2ab+b²","a²−2ab+b²","2a+2b"],1,"Expand the square."],
+["Mathematics","Solution set of x²=9:",["{3}","{−3}","{−3,3}","{9}"],2,"Both 3 and −3 square to 9."],
+["Mathematics","Slope perpendicular to a line of slope 2:",["2","−2","1/2","−1/2"],3,"Perpendicular slopes multiply to −1."],
+["Mathematics","i² equals:",["1","−1","i","−i"],1,"By definition i²=−1."],
+["Mathematics","Modulus of 3+4i:",["1","5","7","25"],1,"√(3²+4²)=5."],
+["Mathematics","Determinant of an identity matrix of order 3:",["0","1","3","−1"],1,"An identity matrix has determinant 1."],
+["Mathematics","A matrix with 2 rows and 3 columns has order:",["3×2","2×3","2×2","3×3"],1,"Order is rows by columns."],
+["Mathematics","sin²x+cos²x equals:",["0","1","2","sin x"],1,"This is a standard identity."],
+["Mathematics","Period of sin x:",["π/2","π","2π","4π"],2,"Sine repeats every 2π radians."],
+["Mathematics","General solution of cos x=1:",["x=nπ","x=2nπ","x=(2n+1)π","x=π/2+nπ"],1,"Cosine is 1 at multiples of 2π."],
+["Mathematics","Maximum value of sin x:",["−1","0","1","2"],2,"The range of sine is [−1,1]."],
+["Mathematics","Area under y=1 from x=0 to x=4:",["1","2","4","8"],2,"Rectangle area is 1×4=4."],
+["Mathematics","Derivative of a constant:",["The constant","1","0","Always undefined"],2,"The derivative is zero."],
+["Mathematics","For y=x², tangent slope at x=3:",["3","6","9","12"],1,"dy/dx=2x, giving 6."],
+["Mathematics","Slope-intercept form of a straight line:",["x=my+c","y=mx+c","y=m/x+c","xy=c"],1,"The form is y=mx+c."],
+["Mathematics","Distance between parallel lines y=3 and y=8:",["3","5","8","11"],1,"Distance is |8−3|=5."]
+];
+
+let current=0,filter="All",timeLeft=180*60,finished=false;
+let testStarted=false;
+const answers=Array(questions.length).fill(null);
+const visited=Array(questions.length).fill(false);
+const marked=Array(questions.length).fill(false);
+visited[0]=true;
+const startTime=Date.now();
+let timerHandle;
+
+function fmt(s){let h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?`${h}:${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}`:`${String(m).padStart(2,"0")}:${String(x).padStart(2,"0")}`}
+function status(i){if(marked[i]&&answers[i]!==null)return "answeredreview";if(marked[i])return "review";if(answers[i]!==null)return "answered";if(visited[i])return "notanswered";return ""}
+function render(){
+ const q=questions[current];
+ document.getElementById("meta").textContent=`Question ${current+1} of ${questions.length} • ${q[0]} • ${q[0]==="Mathematics"?2:1} mark(s)`;
+ document.getElementById("question").textContent=`Q${current+1}. ${q[1]}`;
+ const opts=document.getElementById("options");opts.innerHTML="";
+ q[2].forEach((v,i)=>{
+   const label=document.createElement("label");label.className="option"+(answers[current]===i?" selected":"");
+   const radio=document.createElement("input");radio.type="radio";radio.name="answer";radio.checked=answers[current]===i;
+   radio.onchange=()=>{answers[current]=i;render();};
+   label.append(radio,document.createTextNode(" "+String.fromCharCode(65+i)+". "+v));opts.append(label);
+ });
+ renderPalette();counts();
+}
+function renderPalette(){
+ const p=document.getElementById("palette");p.innerHTML="";
+ questions.forEach((q,i)=>{
+  if(filter!=="All"&&q[0]!==filter)return;
+  const b=document.createElement("button");b.textContent=i+1;b.className="pbtn "+status(i)+(i===current?" current":"");
+  b.onclick=()=>{current=i;visited[i]=true;render()};p.append(b);
+ });
+}
+function counts(){
+ let a=answers.filter(x=>x!==null).length;
+ let nv=visited.filter(x=>!x).length;
+ let na=visited.filter((x,i)=>x&&answers[i]===null).length;
+ document.getElementById("counts").textContent=`Answered: ${a} | Not answered: ${na} | Not visited: ${nv} | Review: ${marked.filter(Boolean).length}`;
+}
+function setFilter(f,button){filter=f;document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));button.classList.add("active");renderPalette();}
+function previous(){if(current>0){current--;visited[current]=true;render()}}
+function next(){if(current<questions.length-1){current++;visited[current]=true;render()}else alert("This is the last question. Click Submit Test when ready.")}
+function clearAnswer(){answers[current]=null;render()}
+function markReview(){marked[current]=true;if(current<questions.length-1){current++;visited[current]=true}render()}
+function submitTest(){if(finished)return;let n=answers.filter(x=>x===null).length;if(confirm(`Submit your test?\nAttempted: ${questions.length-n}\nUnattempted: ${n}`))finish()}
+function finish(){
+ if(finished)return;finished=true;clearInterval(timerHandle);
+ document.getElementById("exam").style.display="none";document.getElementById("result").style.display="block";
+ let total=0,correct=0,wrong=0,un=0;
+ const stats={Physics:{c:0,w:0,u:0,s:0,max:50},Chemistry:{c:0,w:0,u:0,s:0,max:50},Mathematics:{c:0,w:0,u:0,s:0,max:100}};
+ questions.forEach((q,i)=>{
+  let marks=q[0]==="Mathematics"?2:1,st=stats[q[0]];
+  if(answers[i]===null){un++;st.u++}
+  else if(answers[i]===q[3]){correct++;total+=marks;st.c++;st.s+=marks}
+  else{wrong++;st.w++}
+ });
+ const pct=total/2;
+ document.getElementById("score").textContent=total;
+ document.getElementById("percentage").textContent=`Percentage: ${pct.toFixed(1)}% • Time used: ${fmt(180*60-timeLeft)}`;
+ document.getElementById("correct").textContent=correct;
+ document.getElementById("wrong").textContent=wrong;
+ document.getElementById("unattempted").textContent=un;
+ document.getElementById("timeUsed").textContent=fmt(180*60-timeLeft);
+ document.getElementById("message").textContent=pct>=85?"Excellent performance! Keep practising.":pct>=70?"Very good effort. Review your mistakes to improve.":pct>=50?"Good start. Focus on topics where you lost marks.":pct>=30?"Keep practising and revise the key concepts.":"Use this result to identify topics to revise.";
+ document.getElementById("subjectRows").innerHTML=Object.entries(stats).map(([s,x])=>`<tr><td>${s}</td><td>${x.c}</td><td>${x.w}</td><td>${x.u}</td><td>${x.s}</td><td>${x.max}</td></tr>`).join("")+`<tr><th>Total</th><th>${correct}</th><th>${wrong}</th><th>${un}</th><th>${total}</th><th>200</th></tr>`;
+ document.getElementById("reviewResults").innerHTML=questions.map((q,i)=>{
+  let chosen=answers[i]===null?"Not attempted":String.fromCharCode(65+answers[i])+". "+q[2][answers[i]];
+  let right=String.fromCharCode(65+q[3])+". "+q[2][q[3]];
+  return `<div class="reviewitem"><b>Q${i+1} (${q[0]}): ${esc(q[1])}</b><p class="${answers[i]===q[3]?'correct':'wrong'}">Your answer: ${esc(chosen)}</p><p class="correct">Correct answer: ${esc(right)}</p><p>${esc(q[4])}</p></div>`;
+ }).join("");
+ document.getElementById("percentile").textContent="Pending — batch score data not connected";
+ window.scrollTo(0,0);
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function startTest(){
+  if(testStarted || finished) return;
+
+  testStarted=true;
+
+  document.getElementById("instructions").style.display="none";
+  document.getElementById("exam").style.display="grid";
+
+  current=0;
+  visited[0]=true;
+  timeLeft=180*60;
+
+  document.getElementById("timer").textContent="Time Left: "+fmt(timeLeft);
+
+  render();
+
+  timerHandle=setInterval(()=>{
+    if(finished) return;
+
+    timeLeft--;
+
+    document.getElementById("timer").textContent=
+      "Time Left: "+fmt(Math.max(0,timeLeft));
+
+    if(timeLeft<=0){
+      timeLeft=0;
+      document.getElementById("timer").textContent="Time Left: 00:00";
+      finish();
+    }
+  },1000);
+}
+
+window.addEventListener("beforeunload", e => {
+  if (testStarted && !finished) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+</script>
+</body>
+</html>
