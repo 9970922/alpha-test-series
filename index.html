@@ -677,21 +677,90 @@
     .addEventListener("click", checkApproval);
 
   function checkApproval() {
-    const registrationId =
-      sessionStorage.getItem("alphaRegistrationId");
+  const registrationId = sessionStorage.getItem("alphaRegistrationId");
+  const resultMessage = document.getElementById("resultMessage");
 
-    const resultMessage =
-      document.getElementById("approvalMessage");
+  if (!registrationId) {
+    resultMessage.textContent =
+      "Registration ID not found. Please register again.";
+    return;
+  }
 
-    const button =
-      document.getElementById("checkApprovalButton");
+  resultMessage.textContent = "Checking payment approval...";
 
-    if (!registrationId) {
-      resultMessage.style.color = "#b42318";
+  const callbackName =
+    "alphaApprovalCallback_" + Date.now();
+
+  const script = document.createElement("script");
+  let finished = false;
+
+  const cleanup = () => {
+    clearTimeout(timeoutId);
+    script.remove();
+    delete window[callbackName];
+  };
+
+  const timeoutId = setTimeout(() => {
+    if (finished) return;
+    finished = true;
+    cleanup();
+
+    resultMessage.textContent =
+      "Unable to check approval. Please try again.";
+  }, 15000);
+
+  window[callbackName] = function (result) {
+    if (finished) return;
+    finished = true;
+    cleanup();
+
+    if (!result || !result.status) {
       resultMessage.textContent =
-        "Registration ID not found in this browser session. Please register again.";
+        "Invalid response from approval server.";
       return;
     }
+
+    if (result.status === "Approved") {
+      resultMessage.textContent =
+        "Payment approved! Opening your test...";
+
+      setTimeout(() => {
+        window.location.href = "test.html";
+      }, 500);
+    } else if (result.status === "Pending") {
+      resultMessage.textContent =
+        "Payment is pending. Please check again later.";
+    } else if (result.status === "Rejected") {
+      resultMessage.textContent =
+        "Payment rejected. Please contact Alpha support.";
+    } else if (result.status === "Not Found") {
+      resultMessage.textContent =
+        "Registration not found. Please register again.";
+    } else {
+      resultMessage.textContent =
+        "Status: " + result.status + ". Please try again.";
+    }
+  };
+
+  const params = new URLSearchParams({
+    action: "status",
+    registrationId: registrationId,
+    callback: callbackName
+  });
+
+  script.src = scriptURL + "?" + params.toString();
+
+  script.onerror = function () {
+    if (finished) return;
+    finished = true;
+    cleanup();
+
+    resultMessage.textContent =
+      "Approval server could not be reached. Check deployment settings.";
+  };
+
+  document.body.appendChild(script);
+}
 
     button.disabled = true;
     resultMessage.style.color = "#344054";
