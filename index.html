@@ -123,7 +123,7 @@
       <div class="notice"><strong>Important:</strong> Payment is manually verified. Registration does not automatically approve payment or activate a test.</div>
       <div class="payment-help">
         <h3>Pay Using UPI</h3><p>Selected Plan Amount:</p><h2 id="paymentAmount">Select a plan first</h2>
-        <img src="alpha-payment-qr.jpeg" alt="Alpha Payment QR Code" id="paymentQR" class="payment-qr">
+        <img src="alpha-199.jpeg" alt="Alpha Payment QR Code" id="paymentQR" class="payment-qr">
         <p><strong>UPI ID</strong></p><p class="upi-id">9766404515@airtel</p>
         <button type="button" class="button" onclick="copyUPI()">Copy UPI ID</button>
         <p style="margin-top:15px;font-size:13px;color:#667085;">पेमेंट करण्यापूर्वी योग्य प्लॅन आणि रक्कम तपासा. UPI app मध्ये recipient आणि amount पडताळा.</p>
@@ -196,6 +196,13 @@
     document.getElementById("selectedPlan").textContent =
       "Selected Plan: " + name + " | Amount: ₹" + price;
     document.getElementById("paymentAmount").textContent = "₹" + price;
+    const qrImage = document.getElementById("paymentQR");
+
+if (price === 199) {
+  qrImage.src = "alpha-199.jpeg";
+} else if (price === 499) {
+  qrImage.src = "alpha-499.jpeg";
+}
     document.getElementById("payment").scrollIntoView({ behavior: "smooth" });
   }
 
